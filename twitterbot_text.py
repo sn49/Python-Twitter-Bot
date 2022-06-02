@@ -1,5 +1,7 @@
 import tweepy
 from time import sleep
+import datetime
+import random
 
 # Import Twitter credentials from credentials.py
 from credentials import *
@@ -9,22 +11,44 @@ auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth)
 
-my_file=open('sample.txt','r')
-file_lines=my_file.readlines()
+version = {"keyword_update": 0, "feature_update": 1, "error_fix": 0}
+
+show_version = f"V=k{version['keyword_update']}-f{version['feature_update']}-e{version['error_fix']}"
+
+keyword_list = []
+
+my_file = open("keyword.kwd", "r", encoding="UTF-8")
+file_lines = my_file.readlines()
 my_file.close()
 
 # Create a for loop to iterate over file_lines
 for line in file_lines:
-# Add try ... except block to catch and output errors
-    try:
-        print(line)
-        # Add if statement to ensure that blank lines are skipped
-        if line != '\n':
-            api.update_status(line)
+    if line == "END,END,END,END,END":
+        break
+    elif "version=" in line:
+        version["keyword_update"] = int(line.split("=")[1])
+    else:
+        keyword_list.append(line.replace("\n", ""))
 
-        # Add an else statement with pass to conclude the conditional statement
+print(keyword_list)
+api.update_profile(
+    description=f"1시,5시,9시,13시,17시,21시 아무거나 대결 시키는 계정 | 비주기적으로 키워드 추가 | 현재 키워드 : {len(keyword_list)}개 | 버전 : {show_version}"
+)
+
+while True:
+    # Add try ... except block to catch and output errors
+    try:
+        cnow = datetime.datetime.now()
+        cmin = cnow.minute
+        chour = cnow.hour
+
+        if cmin == 0 and chour % 4 == 1:
+            select_keyword = random.sample(keyword_list, 2)
+
+            api.update_status(f"{select_keyword[0]} VS {select_keyword[1]}")
         else:
-            pass
-    except tweepy.TweepError as e:
+            print(f"{chour}시 {cmin}분")
+
+    except tweepy.TwitterServerError as e:
         print(e.reason)
-    sleep(10)
+    sleep(60)
