@@ -11,9 +11,8 @@ auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth)
 
-version = {"keyword_update": 0, "feature_update": 1, "error_fix": 0}
+version = {"keyword_update": 0, "feature_update": 1, "error_fix": 1}
 
-show_version = f"V=k{version['keyword_update']}-f{version['feature_update']}-e{version['error_fix']}"
 
 keyword_list = []
 
@@ -26,11 +25,14 @@ for line in file_lines:
     if line == "END,END,END,END,END":
         break
     elif "version=" in line:
+        line = line.replace("\n", "")
         version["keyword_update"] = int(line.split("=")[1])
     else:
         keyword_list.append(line.replace("\n", ""))
 
 print(keyword_list)
+show_version = f"V=k{version['keyword_update']}-f{version['feature_update']}-e{version['error_fix']}"
+
 api.update_profile(
     description=f"1시,5시,9시,13시,17시,21시 아무거나 대결 시키는 계정 | 비주기적으로 키워드 추가 | 현재 키워드 : {len(keyword_list)}개 | 버전 : {show_version}"
 )
