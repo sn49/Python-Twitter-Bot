@@ -11,7 +11,7 @@ auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth)
 
-version = {"keyword_update": 0, "feature_update": 1, "error_fix": 1}
+version = {"keyword_update": 0, "feature_update": 1, "error_fix": 2}
 
 
 keyword_list = []
@@ -22,9 +22,7 @@ my_file.close()
 
 # Create a for loop to iterate over file_lines
 for line in file_lines:
-    if line == "END,END,END,END,END":
-        break
-    elif "version=" in line:
+    if "version=" in line:
         line = line.replace("\n", "")
         version["keyword_update"] = int(line.split("=")[1])
     else:
