@@ -17,6 +17,10 @@ version = {"keyword_update": 0, "feature_update": 2, "error_fix": 2}
 keyword_list = []
 
 
+def twitter_up(descript):
+    api.update_profile(description=descript)
+
+
 def update_wordlist():
     global version
     global keyword_list
@@ -43,10 +47,6 @@ update_wordlist()
 
 
 show_version = f"V=k{version['keyword_update']}-f{version['feature_update']}-e{version['error_fix']}"
-
-
-def twitter_up(descript):
-    api.update_profile(description=descript)
 
 
 while True:
