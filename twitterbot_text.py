@@ -13,6 +13,7 @@ auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth)
 
 version = {"keyword_update": 0, "feature_update": 2, "error_fix": 2}
+show_version = f"V=k{version['keyword_update']}-f{version['feature_update']}-e{version['error_fix']}"
 
 keyword_list = []
 
@@ -44,9 +45,6 @@ def update_wordlist():
 
 
 update_wordlist()
-
-
-show_version = f"V=k{version['keyword_update']}-f{version['feature_update']}-e{version['error_fix']}"
 
 
 while True:
